@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 void main() =>
     runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Simple Interest Calculator',
       home: SIForm(),
+      theme: ThemeData(
+          primaryColor: Colors.green, accentColor: Colors.greenAccent),
     ));
 
 class SIForm extends StatefulWidget {
@@ -19,30 +22,62 @@ class _SIFormState extends State<SIForm> {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle textStyle = Theme
+        .of(context)
+        .textTheme
+        .subhead;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Simple Interest Calculator'),
       ),
       body: Container(
         margin: EdgeInsets.all(_minimumPadding * 2),
-        child: Column(
+        child: ListView(
           children: <Widget>[
             getBankImage(),
             Padding(
                 padding: EdgeInsets.only(
                     top: _minimumPadding, bottom: _minimumPadding),
-                child: textField('Principal', 'Enter Principal e.g. 12000')),
+                child: TextField(
+                  keyboardType: TextInputType.number,
+                  style: textStyle,
+                  decoration: InputDecoration(
+                      labelText: 'Principal',
+                      hintText: 'Enter Principal e.g. 12000',
+                      labelStyle: textStyle,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0))),
+                )),
             Padding(
                 padding: EdgeInsets.only(
                     top: _minimumPadding, bottom: _minimumPadding),
-                child: textField('Rate of Interest', 'In percent')),
+                child: TextField(
+                  keyboardType: TextInputType.number,
+                  style: textStyle,
+                  decoration: InputDecoration(
+                      labelText: 'Rate of Interest',
+                      hintText: 'In percent',
+                      labelStyle: textStyle,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0))),
+                )),
             Padding(
               padding: EdgeInsets.only(
                   top: _minimumPadding, bottom: _minimumPadding),
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: textField('Term', 'Time in years'),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      style: textStyle,
+                      decoration: InputDecoration(
+                          labelText: 'Term',
+                          hintText: 'Time in years',
+                          labelStyle: textStyle,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0))),
+                    ),
                   ),
                   Container(
                     width: _minimumPadding * 5,
@@ -60,6 +95,28 @@ class _SIFormState extends State<SIForm> {
                       ))
                 ],
               ),
+            ),
+            Padding(
+                padding: EdgeInsets.only(
+                    bottom: _minimumPadding, top: _minimumPadding),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: RaisedButton(
+                          child: Text('Calculate', style: textStyle),
+                          onPressed: () {}),
+                    ), Container(width: _minimumPadding,),
+                    Expanded(
+                        child: RaisedButton(
+                            child: Text('Reset', style: textStyle),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0)),
+                            onPressed: () {}))
+                  ],
+                )),
+            Padding(
+              padding: EdgeInsets.all(_minimumPadding * 2),
+              child: Text('Total Interest', style: textStyle),
             )
           ],
         ),
@@ -75,15 +132,5 @@ class _SIFormState extends State<SIForm> {
           height: 125.0,
         ),
         margin: EdgeInsets.all(_minimumPadding * 10),
-      );
-
-  Widget textField(String label, String hint) =>
-      TextField(
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-            labelText: label,
-            hintText: hint,
-            border:
-            OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
       );
 }
