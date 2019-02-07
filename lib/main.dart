@@ -17,13 +17,14 @@ class SIForm extends StatefulWidget {
 }
 
 class _SIFormState extends State<SIForm> {
-  List<String> _currencies = ['Dollars', 'Pounds', 'Rupees'];
-  final double _minimumPadding = 5.0;
-  String _currentItemSelected = 'Dollars';
-  TextEditingController principalController = TextEditingController();
-  TextEditingController roiController = TextEditingController();
-  TextEditingController termController = TextEditingController();
-  String displayResult = '';
+  var _currencies = ['Dollars', 'Pounds', 'Rupees'];
+  final _minimumPadding = 5.0;
+  var _currentItemSelected = 'Dollars';
+  var _formKey = GlobalKey();
+  var principalController = TextEditingController();
+  var roiController = TextEditingController();
+  var termController = TextEditingController();
+  var displayResult = '';
 
   @override
   Widget build(BuildContext context) {
@@ -35,62 +36,64 @@ class _SIFormState extends State<SIForm> {
       appBar: AppBar(
         title: Text('Simple Interest Calculator'),
       ),
-      body: Container(
-        margin: EdgeInsets.all(_minimumPadding * 2),
-        child: ListView(
-          children: <Widget>[
-            getBankImage(),
-            Padding(
-                padding: EdgeInsets.only(
-                    top: _minimumPadding, bottom: _minimumPadding),
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  style: textStyle,
-                  controller: principalController,
-                  decoration: InputDecoration(
-                      labelText: 'Principal',
-                      hintText: 'Enter Principal e.g. 12000',
-                      labelStyle: textStyle,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0))),
-                )),
-            Padding(
-                padding: EdgeInsets.only(
-                    top: _minimumPadding, bottom: _minimumPadding),
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  style: textStyle,
-                  controller: roiController,
-                  decoration: InputDecoration(
-                      labelText: 'Rate of Interest',
-                      hintText: 'In percent',
-                      labelStyle: textStyle,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0))),
-                )),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: _minimumPadding, bottom: _minimumPadding),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
+      body: Form(
+        key: _formKey,
+        child: Padding(
+            padding: EdgeInsets.all(_minimumPadding * 2),
+            child: ListView(
+              children: <Widget>[
+                getBankImage(),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: _minimumPadding, bottom: _minimumPadding),
                     child: TextField(
                       keyboardType: TextInputType.number,
                       style: textStyle,
-                      controller: termController,
+                      controller: principalController,
                       decoration: InputDecoration(
-                          labelText: 'Term',
-                          hintText: 'Time in years',
+                          labelText: 'Principal',
+                          hintText: 'Enter Principal e.g. 12000',
                           labelStyle: textStyle,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
-                    ),
-                  ),
-                  Container(
-                    width: _minimumPadding * 5,
-                  ),
-                  Expanded(
-                      child: DropdownButton<String>(
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: _minimumPadding, bottom: _minimumPadding),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      style: textStyle,
+                      controller: roiController,
+                      decoration: InputDecoration(
+                          labelText: 'Rate of Interest',
+                          hintText: 'In percent',
+                          labelStyle: textStyle,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0))),
+                    )),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: _minimumPadding, bottom: _minimumPadding),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          style: textStyle,
+                          controller: termController,
+                          decoration: InputDecoration(
+                              labelText: 'Term',
+                              hintText: 'Time in years',
+                              labelStyle: textStyle,
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5.0))),
+                        ),
+                      ),
+                      Container(
+                        width: _minimumPadding * 5,
+                      ),
+                      Expanded(
+                          child: DropdownButton<String>(
                         items: _currencies.map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -102,49 +105,49 @@ class _SIFormState extends State<SIForm> {
                           _onDropDownItemSelected(newValueSelected);
                         },
                       ))
-                ],
-              ),
-            ),
-            Padding(
-                padding: EdgeInsets.only(
-                    bottom: _minimumPadding, top: _minimumPadding),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: RaisedButton(
-                          child: Text('Calculate', style: textStyle),
-                          onPressed: () {
-                            setState(() {
-                              displayResult = _calculateTotalReturns();
-                            });
-                          }),
-                    ),
-                    Container(
-                      width: _minimumPadding,
-                    ),
-                    Expanded(
-                        child: RaisedButton(
-                            child: Text('Reset', style: textStyle),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0)),
-                            onPressed: () {
-                              setState(() {
-                                reset();
-                              });
-                            }))
-                  ],
-                )),
-            Padding(
-              padding: EdgeInsets.all(_minimumPadding * 2),
-              child: Text(displayResult, style: textStyle),
-            )
-          ],
-        ),
+                    ],
+                  ),
+                ),
+                Padding(
+                    padding: EdgeInsets.only(
+                        bottom: _minimumPadding, top: _minimumPadding),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: RaisedButton(
+                              child: Text('Calculate', style: textStyle),
+                              onPressed: () {
+                                setState(() {
+                                  displayResult = _calculateTotalReturns();
+                                });
+                              }),
+                        ),
+                        Container(
+                          width: _minimumPadding,
+                        ),
+                        Expanded(
+                            child: RaisedButton(
+                                child: Text('Reset', style: textStyle),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.0)),
+                                onPressed: () {
+                                  setState(() {
+                                    reset();
+                                  });
+                                }))
+                      ],
+                    )),
+                Padding(
+                  padding: EdgeInsets.all(_minimumPadding * 2),
+                  child: Text(displayResult, style: textStyle),
+                )
+              ],
+            )),
       ),
     );
   }
 
-  Widget getBankImage() =>
+  getBankImage() =>
       Container(
         child: Image(
           image: AssetImage('images/bank.png'),
@@ -159,12 +162,12 @@ class _SIFormState extends State<SIForm> {
         _currentItemSelected = value;
       });
 
-  String _calculateTotalReturns() {
-    double principal = double.parse(principalController.text);
-    double roi = double.parse(roiController.text);
-    double term = double.parse(termController.text);
+  _calculateTotalReturns() {
+    var principal = double.parse(principalController.text);
+    var roi = double.parse(roiController.text);
+    var term = double.parse(termController.text);
 
-    double totalAmountPayable = principal + (principal * roi * term) / 100;
+    var totalAmountPayable = principal + (principal * roi * term) / 100;
 
     return 'After $term years, your investment will be worth \$$totalAmountPayable $_currentItemSelected';
   }
