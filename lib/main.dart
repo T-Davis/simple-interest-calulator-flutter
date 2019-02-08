@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() =>
     runApp(MaterialApp(
@@ -262,13 +263,36 @@ class _SIFormState extends State<SIForm> {
       });
 
   _calculateTotalReturns() {
-    var principal = double.parse(principalController.text);
-    var roi = double.parse(roiController.text);
-    var term = double.parse(termController.text);
+    var principal = double.parse(_principalController.text);
+    var yearlyAdd = _yearlyAddController.text == ''
+        ? 0
+        : double.parse(_yearlyAddController.text);
+    var roi = double.parse(_roiController.text) / 100;
+    var term = double.parse(_termController.text);
+    var reinvest = _reinvestInterest;
+    var totalAmountPayable = 0.0;
+    var newPrincipal = principal;
 
-    var totalAmountPayable = principal + (principal * roi * term) / 100;
-
-    return 'After $term years, your investment will be worth \$$totalAmountPayable $_currentItemSelected';
+    if (reinvest) {
+      for (var i = 0; i < term; i++) {
+        newPrincipal += (newPrincipal + yearlyAdd) * roi + yearlyAdd;
+        totalAmountPayable = newPrincipal;
+      }
+    } else {
+      if (yearlyAdd > 0) {
+        for (var i = 0; i < term; i++) {
+          newPrincipal += (principal + yearlyAdd * (i + 1)) * roi;
+          totalAmountPayable = newPrincipal;
+        }
+      } else {
+        totalAmountPayable = principal + (principal * roi * term);
+      }
+    }
+    var currencyFormat = NumberFormat.currency();
+    var numberFormat = NumberFormat('####.##');
+    return 'After ${numberFormat.format(
+        term)} years, your investment will be worth ${currencyFormat.format(
+        totalAmountPayable)}';
   }
 
   reset() {
