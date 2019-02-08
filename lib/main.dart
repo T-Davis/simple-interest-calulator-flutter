@@ -60,7 +60,7 @@ class _SIFormState extends State<SIForm> {
                 Padding(
                     padding: EdgeInsets.only(
                         top: _minimumPadding, bottom: _minimumPadding),
-                    child: TextField(
+                    child: TextFormField(
                       keyboardType: TextInputType.number,
                       style: textStyle,
                       controller: roiController,
@@ -187,9 +187,13 @@ class _SIFormState extends State<SIForm> {
   }
 
   reset() {
-    principalController.text = '';
-    roiController.text = '';
-    termController.text = '';
-    displayResult = '';
+    _formKey.currentState.reset();
+    _principalController.text = '';
+    _yearlyAddController.text = '';
+    _roiController.text = '';
+    _reinvestInterest = false;
+    _termController.text = '';
+    _displayResult = '';
+    FocusScope.of(context).requestFocus(FocusNode());
   }
 }
