@@ -115,10 +115,19 @@ class _SIFormState extends State<SIForm> {
                       children: <Widget>[
                         Expanded(
                           child: RaisedButton(
-                              child: Text('Calculate', style: textStyle),
+                              child: Text('Calculate',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: textStyle.fontSize,
+                                      fontWeight: FontWeight.bold)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0)),
+                              color: Colors.green,
                               onPressed: () {
                                 setState(() {
-                                  displayResult = _calculateTotalReturns();
+                                  if (_formKey.currentState.validate()) {
+                                    _displayResult = _calculateTotalReturns();
+                                  }
                                 });
                               }),
                         ),
@@ -127,9 +136,14 @@ class _SIFormState extends State<SIForm> {
                         ),
                         Expanded(
                             child: RaisedButton(
-                                child: Text('Reset', style: textStyle),
+                                child: Text('Reset',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: textStyle.fontSize,
+                                        fontWeight: FontWeight.bold)),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5.0)),
+                                color: Colors.green,
                                 onPressed: () {
                                   setState(() {
                                     reset();
