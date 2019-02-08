@@ -6,7 +6,9 @@ void main() =>
       title: 'Simple Interest Calculator',
       home: SIForm(),
       theme: ThemeData(
-          primaryColor: Colors.green, accentColor: Colors.greenAccent),
+        primaryColor: Colors.green,
+        accentColor: Colors.green,
+      ),
     ));
 
 class SIForm extends StatefulWidget {
@@ -46,16 +48,29 @@ class _SIFormState extends State<SIForm> {
                 Padding(
                     padding: EdgeInsets.only(
                         top: _minimumPadding, bottom: _minimumPadding),
-                    child: TextField(
+                    child: TextFormField(
                       keyboardType: TextInputType.number,
                       style: textStyle,
-                      controller: principalController,
+                      controller: _principalController,
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please enter amount';
+                        }
+                        if (double.tryParse(value) == null) {
+                          return 'Please enter a number';
+                        }
+                      },
                       decoration: InputDecoration(
                           labelText: 'Principal',
-                          hintText: 'Enter Principal e.g. 12000',
+                          hintText: 'Enter initial investment e.g. 12000',
                           labelStyle: textStyle,
+                          errorStyle: TextStyle(
+                              color: Colors.deepOrangeAccent, fontSize: 15.0),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0))),
+                              borderRadius: BorderRadius.circular(5.0)),
+                          errorBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.deepOrangeAccent))),
                     )),
                 Padding(
                     padding: EdgeInsets.only(
@@ -77,16 +92,30 @@ class _SIFormState extends State<SIForm> {
                   child: Row(
                     children: <Widget>[
                       Expanded(
-                        child: TextField(
+                        child: TextFormField(
                           keyboardType: TextInputType.number,
                           style: textStyle,
-                          controller: termController,
+                          controller: _termController,
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return 'Please enter amount';
+                            }
+                            if (double.tryParse(value) == null) {
+                              return 'Please enter a number';
+                            }
+                          },
                           decoration: InputDecoration(
                               labelText: 'Term',
                               hintText: 'Time in years',
                               labelStyle: textStyle,
+                              errorStyle: TextStyle(
+                                  color: Colors.deepOrangeAccent,
+                                  fontSize: 15.0),
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5.0))),
+                                  borderRadius: BorderRadius.circular(5.0)),
+                              errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.deepOrangeAccent))),
                         ),
                       ),
                       Container(
@@ -153,7 +182,7 @@ class _SIFormState extends State<SIForm> {
                     )),
                 Padding(
                   padding: EdgeInsets.all(_minimumPadding * 2),
-                  child: Text(displayResult, style: textStyle),
+                  child: Text(_displayResult, style: textStyle),
                 )
               ],
             )),
