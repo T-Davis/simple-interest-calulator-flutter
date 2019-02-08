@@ -22,11 +22,13 @@ class _SIFormState extends State<SIForm> {
   var _currencies = ['Dollars', 'Pounds', 'Rupees'];
   final _minimumPadding = 5.0;
   var _currentItemSelected = 'Dollars';
-  var _formKey = GlobalKey();
-  var principalController = TextEditingController();
-  var roiController = TextEditingController();
-  var termController = TextEditingController();
-  var displayResult = '';
+  var _formKey = GlobalKey<FormState>();
+  var _principalController = TextEditingController();
+  var _yearlyAddController = TextEditingController();
+  var _roiController = TextEditingController();
+  var _termController = TextEditingController();
+  var _reinvestInterest = false;
+  var _displayResult = '';
 
   @override
   Widget build(BuildContext context) {
@@ -78,13 +80,67 @@ class _SIFormState extends State<SIForm> {
                     child: TextFormField(
                       keyboardType: TextInputType.number,
                       style: textStyle,
-                      controller: roiController,
+                      controller: _yearlyAddController,
+                      validator: (String value) {
+                        if (double.tryParse(value) == null && value != '') {
+                          return 'Please enter a number';
+                        }
+                      },
                       decoration: InputDecoration(
-                          labelText: 'Rate of Interest',
-                          hintText: 'In percent',
+                          labelText: 'Yearly Add',
+                          hintText: 'Enter additional yearly investment',
                           labelStyle: textStyle,
+                          errorStyle: TextStyle(
+                              color: Colors.deepOrangeAccent, fontSize: 15.0),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0))),
+                              borderRadius: BorderRadius.circular(5.0)),
+                          errorBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.deepOrangeAccent))),
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: _minimumPadding, bottom: _minimumPadding),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            style: textStyle,
+                            controller: _roiController,
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'Please enter amount';
+                              }
+                              if (double.tryParse(value) == null) {
+                                return 'Please enter a number';
+                              }
+                            },
+                            decoration: InputDecoration(
+                                labelText: 'Rate of Interest',
+                                hintText: 'In percent',
+                                labelStyle: textStyle,
+                                errorStyle: TextStyle(
+                                    color: Colors.deepOrangeAccent,
+                                    fontSize: 15.0),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0)),
+                                errorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.deepOrangeAccent))),
+                          ),
+                        ),
+                        Expanded(
+                          child: SwitchListTile(
+                              title: Text('Reinvest Interest'),
+                              value: _reinvestInterest,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _reinvestInterest = value;
+                                });
+                              }),
+                        )
+                      ],
                     )),
                 Padding(
                   padding: EdgeInsets.only(
